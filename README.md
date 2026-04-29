@@ -90,12 +90,23 @@ Quand `DATABASE_URL` existe, le backend utilise Supabase/Postgres. Sinon, il uti
 - Dans `index.html`, le lien YouTube utilise `https://www.youtube.com/@Yatus_Beats/`.
 - Le logo et la banniere sont dans `assets/`.
 - Pour GitHub, garde chaque fichier audio sous 25 Mo. Utilise des previews MP3 ou des extraits courts, pas les masters complets.
+- L'URL `/admin.html` existe toujours, mais elle n'est plus affichee publiquement dans le footer.
 
 ## Admin et stats
 
 La page `admin.html` permet de modifier les beats, voir les stats du serveur, consulter les dernieres visites, exporter et importer les donnees.
 
 Le backend stocke les donnees dans Supabase/Postgres quand `DATABASE_URL` est configure. En local sans base de donnees, il utilise `data/site.json`.
+
+Stats visibles dans l'admin :
+
+- visites
+- ecoutes
+- ajouts panier
+- demandes pour un autre beat YouTube
+- beat le plus ecoute
+- beat le plus ajoute au panier
+- derniers liens YouTube demandes
 
 ## Paiement
 

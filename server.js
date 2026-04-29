@@ -202,12 +202,22 @@ function isAdmin(request) {
   return crypto.timingSafeEqual(Buffer.from(password), Buffer.from(adminPassword));
 }
 
-async function trackEvent(eventName, beatId = null) {
+async function trackEvent(eventName, beatId = null, metadata = {}) {
   const state = await readState();
   state.stats[eventName] = (state.stats[eventName] || 0) + 1;
   if (beatId) {
     const key = `${eventName}:${beatId}`;
     state.stats[key] = (state.stats[key] || 0) + 1;
+  }
+  if (eventName === "otherBeatRequests") {
+    state.stats.otherBeatLinks = Array.isArray(state.stats.otherBeatLinks) ? state.stats.otherBeatLinks : [];
+    state.stats.otherBeatLinks.unshift({
+      at: new Date().toISOString(),
+      link: metadata.link || "",
+      license: metadata.license || "",
+      artist: metadata.artist || ""
+    });
+    state.stats.otherBeatLinks = state.stats.otherBeatLinks.slice(0, 50);
   }
   await writeState(state);
   return state.stats;
@@ -255,7 +265,7 @@ async function handleApi(request, response) {
 
   if (request.method === "POST" && requestUrl.pathname === "/api/events") {
     const body = await readBody(request);
-    sendJson(response, 200, { stats: await trackEvent(body.name, body.beatId) });
+    sendJson(response, 200, { stats: await trackEvent(body.name, body.beatId, body.metadata || {}) });
     return;
   }
 

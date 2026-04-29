@@ -37,6 +37,7 @@ const defaultBeats = [
 const form = document.querySelector("#beatForm");
 const beatsTable = document.querySelector("#beatsTable");
 const visitsTable = document.querySelector("#visitsTable");
+const otherRequestsTable = document.querySelector("#otherRequestsTable");
 const importBox = document.querySelector("#importBox");
 
 const fields = {
@@ -138,10 +139,32 @@ function formatDate(value) {
 function renderMetrics() {
   const stats = getStats();
   const beats = getBeats();
+  const topPlay = getTopBeat("plays");
+  const topCart = getTopBeat("cartAdds");
   document.querySelector("#metricVisits").textContent = stats.visits || 0;
   document.querySelector("#metricPlays").textContent = stats.plays || 0;
   document.querySelector("#metricCartAdds").textContent = stats.cartAdds || 0;
   document.querySelector("#metricBeats").textContent = beats.length;
+  document.querySelector("#metricOtherRequests").textContent = stats.otherBeatRequests || 0;
+  document.querySelector("#metricTopPlay").textContent = topPlay;
+  document.querySelector("#metricTopCart").textContent = topCart;
+}
+
+function getTopBeat(eventName) {
+  const stats = getStats();
+  const beats = getBeats();
+  let topBeat = null;
+  let topValue = 0;
+
+  beats.forEach((beat) => {
+    const value = stats[`${eventName}:${beat.id}`] || 0;
+    if (value > topValue) {
+      topValue = value;
+      topBeat = beat;
+    }
+  });
+
+  return topBeat ? `${topBeat.title} (${topValue})` : "-";
 }
 
 function renderBeatsTable() {
@@ -191,10 +214,29 @@ function renderVisits() {
     : '<tr><td colspan="4">Aucune visite enregistree pour le moment.</td></tr>';
 }
 
+function renderOtherRequests() {
+  const requests = Array.isArray(getStats().otherBeatLinks) ? getStats().otherBeatLinks : [];
+  otherRequestsTable.innerHTML = requests.length
+    ? requests
+        .map(
+          (request) => `
+            <tr>
+              <td>${formatDate(request.at)}</td>
+              <td><a href="${request.link}" target="_blank" rel="noreferrer">${request.link}</a></td>
+              <td>${request.license || "-"}</td>
+              <td>${request.artist || "-"}</td>
+            </tr>
+          `
+        )
+        .join("")
+    : '<tr><td colspan="4">Aucune demande pour le moment.</td></tr>';
+}
+
 function renderAdmin() {
   renderMetrics();
   renderBeatsTable();
   renderVisits();
+  renderOtherRequests();
 }
 
 function fillForm(beat, index) {

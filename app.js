@@ -109,11 +109,18 @@ function writeStats(stats) {
   localStorage.setItem(storageKeys.stats, JSON.stringify(stats));
 }
 
-function trackEvent(name, beatId = null) {
+function generateOrderId() {
+  const date = new Date();
+  const stamp = date.toISOString().slice(0, 10).replaceAll("-", "");
+  const suffix = Math.floor(1000 + Math.random() * 9000);
+  return `YB-${stamp}-${suffix}`;
+}
+
+function trackEvent(name, beatId = null, metadata = {}) {
   fetch("/api/events", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, beatId }),
+    body: JSON.stringify({ name, beatId, metadata }),
   }).catch(() => {});
 
   const stats = readStats();
@@ -122,6 +129,17 @@ function trackEvent(name, beatId = null) {
   if (beatId) {
     const key = `${name}:${beatId}`;
     stats[key] = (stats[key] || 0) + 1;
+  }
+
+  if (name === "otherBeatRequests") {
+    stats.otherBeatLinks = stats.otherBeatLinks || [];
+    stats.otherBeatLinks.unshift({
+      at: new Date().toISOString(),
+      link: metadata.link,
+      license: metadata.license,
+      artist: metadata.artist,
+    });
+    stats.otherBeatLinks = stats.otherBeatLinks.slice(0, 20);
   }
 
   writeStats(stats);
@@ -259,17 +277,19 @@ function renderCart() {
 }
 
 function updateCheckoutLinks(total) {
+  const orderId = generateOrderId();
   const orderText = cart.length
     ? cart.map((item) => `- ${item.title} (${item.license}) : ${formatPrice(item.price)}`).join("%0A")
     : "Je veux commander une instrumentale Yatus Beats.";
 
-  const message = `Bonjour Yatus Beats,%0A%0AJe veux commander :%0A${orderText}%0A%0ATotal : ${formatPrice(total)}%0A%0AMon nom d'artiste :`;
+  const message = `Bonjour Yatus Beats,%0A%0ACommande : ${orderId}%0A%0AJe veux commander :%0A${orderText}%0A%0ATotal : ${formatPrice(total)}%0A%0APaiement souhaite : Wave / Orange Money / Cash / Virement%0AMon nom d'artiste :`;
 
   whatsappCheckout.href = `https://wa.me/${contact.whatsappNumber}?text=${message}`;
   emailCheckout.href = `mailto:${contact.email}?subject=Commande%20Yatus%20Beats&body=${message}`;
 }
 
 function buildOtherBeatMessage() {
+  const orderId = generateOrderId();
   const license = otherBeatLicense.value;
   const price = licensePrices[license];
   const artist = otherBeatArtist.value.trim() || "A preciser";
@@ -278,10 +298,13 @@ function buildOtherBeatMessage() {
   return [
     "Bonjour Yatus Beats,",
     "",
+    `Commande : ${orderId}`,
+    "",
     "Je veux acheter un beat vu sur ta chaine YouTube :",
     `Lien : ${otherBeatLink.value.trim()}`,
     `Licence : ${license} - ${formatPrice(price)}`,
     `Nom d'artiste : ${artist}`,
+    "Paiement souhaite : Wave / Orange Money / Cash / Virement",
     `Message : ${note}`,
   ].join("\n");
 }
@@ -348,8 +371,14 @@ otherBeatForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const submitter = event.submitter;
   const message = buildOtherBeatMessage();
+  const license = otherBeatLicense.value;
+  const artist = otherBeatArtist.value.trim() || "A preciser";
 
-  trackEvent("otherBeatRequests");
+  trackEvent("otherBeatRequests", null, {
+    link: otherBeatLink.value.trim(),
+    license,
+    artist,
+  });
 
   if (submitter?.dataset.orderChannel === "email") {
     window.location.href = `mailto:${contact.email}?subject=Commande%20autre%20beat%20Yatus%20Beats&body=${encodeURIComponent(message)}`;
