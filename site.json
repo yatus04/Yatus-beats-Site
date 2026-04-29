@@ -1,0 +1,50 @@
+{
+  "beats": [
+    {
+      "id": "9tq_dURbYuo",
+      "title": "India",
+      "style": "African Drill Mbalakh",
+      "bpm": 152,
+      "key": "Non precisee",
+      "mood": "Percutant, africain, drill",
+      "youtube": "https://youtu.be/9tq_dURbYuo",
+      "audio": "assets/audio/india-preview-short.wav",
+      "popular": true
+    },
+    {
+      "id": "nwEaxBznCD8",
+      "title": "Mali",
+      "style": "African Drill",
+      "bpm": null,
+      "key": "Non precisee",
+      "mood": "Lourd, tribal, sombre",
+      "youtube": "https://youtu.be/nwEaxBznCD8",
+      "audio": "assets/audio/mali-preview.mp3",
+      "popular": true
+    },
+    {
+      "id": "hbyxp2dGqc8",
+      "title": "Maroc",
+      "style": "Drill Mbalakh",
+      "bpm": 147,
+      "key": "Non precisee",
+      "mood": "Mystique, drill, mbalakh",
+      "youtube": "https://youtu.be/hbyxp2dGqc8",
+      "audio": "assets/audio/maroc-preview.mp3",
+      "popular": true
+    }
+  ],
+  "stats": {
+    "visits": 1,
+    "lastVisitAt": "2026-04-28T23:28:18.099Z"
+  },
+  "visits": [
+    {
+      "sessionId": "ee11db13-3788-487d-b842-c2fb30cd6f40",
+      "at": "2026-04-28T23:28:18.099Z",
+      "page": "/index.html",
+      "referrer": "http://localhost:3000/admin.html",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+    }
+  ]
+}
