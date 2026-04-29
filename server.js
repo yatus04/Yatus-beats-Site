@@ -8,6 +8,9 @@ const dataDir = path.join(rootDir, "data");
 const dataFile = path.join(dataDir, "site.json");
 const port = Number(process.env.PORT || 3000);
 const adminPassword = process.env.ADMIN_PASSWORD || "yatus-admin";
+const databaseUrl = process.env.DATABASE_URL || "";
+
+let dbPool = null;
 
 const defaultState = {
   beats: [
@@ -19,7 +22,7 @@ const defaultState = {
       key: "Non precisee",
       mood: "Percutant, africain, drill",
       youtube: "https://youtu.be/9tq_dURbYuo",
-      audio: "assets/audio/india-preview.wav",
+      audio: "assets/audio/india-preview-short.wav",
       popular: true
     },
     {
@@ -62,34 +65,106 @@ const mimeTypes = {
   ".ico": "image/x-icon"
 };
 
+function cloneDefaultState() {
+  return JSON.parse(JSON.stringify(defaultState));
+}
+
+function normalizeState(state) {
+  return {
+    beats: Array.isArray(state?.beats) ? state.beats : defaultState.beats,
+    stats: state?.stats && typeof state.stats === "object" ? state.stats : {},
+    visits: Array.isArray(state?.visits) ? state.visits : []
+  };
+}
+
+function getPool() {
+  if (!databaseUrl) return null;
+  if (!dbPool) {
+    const { Pool } = require("pg");
+    dbPool = new Pool({
+      connectionString: databaseUrl,
+      ssl: process.env.DATABASE_SSL === "false" ? false : { rejectUnauthorized: false }
+    });
+  }
+  return dbPool;
+}
+
 function ensureDataFile() {
   if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });
   }
   if (!fs.existsSync(dataFile)) {
-    writeState(defaultState);
+    writeJsonState(defaultState);
   }
 }
 
-function readState() {
+function readJsonState() {
   ensureDataFile();
   try {
-    const state = JSON.parse(fs.readFileSync(dataFile, "utf8"));
-    return {
-      beats: Array.isArray(state.beats) ? state.beats : defaultState.beats,
-      stats: state.stats && typeof state.stats === "object" ? state.stats : {},
-      visits: Array.isArray(state.visits) ? state.visits : []
-    };
+    return normalizeState(JSON.parse(fs.readFileSync(dataFile, "utf8")));
   } catch (error) {
-    return JSON.parse(JSON.stringify(defaultState));
+    return cloneDefaultState();
   }
 }
 
-function writeState(state) {
+function writeJsonState(state) {
   if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });
   }
-  fs.writeFileSync(dataFile, `${JSON.stringify(state, null, 2)}\n`);
+  fs.writeFileSync(dataFile, `${JSON.stringify(normalizeState(state), null, 2)}\n`);
+}
+
+async function initDatabase() {
+  const pool = getPool();
+  if (!pool) {
+    ensureDataFile();
+    return;
+  }
+
+  await pool.query(`
+    create table if not exists app_state (
+      id text primary key,
+      data jsonb not null,
+      updated_at timestamptz not null default now()
+    )
+  `);
+
+  await pool.query(
+    `
+      insert into app_state (id, data)
+      values ($1, $2::jsonb)
+      on conflict (id) do nothing
+    `,
+    ["site", JSON.stringify(defaultState)]
+  );
+}
+
+async function readState() {
+  const pool = getPool();
+  if (!pool) return readJsonState();
+
+  const result = await pool.query("select data from app_state where id = $1", ["site"]);
+  return normalizeState(result.rows[0]?.data || defaultState);
+}
+
+async function writeState(state) {
+  const pool = getPool();
+  const normalizedState = normalizeState(state);
+
+  if (!pool) {
+    writeJsonState(normalizedState);
+    return;
+  }
+
+  await pool.query(
+    `
+      insert into app_state (id, data, updated_at)
+      values ($1, $2::jsonb, now())
+      on conflict (id)
+      do update set data = excluded.data, updated_at = now()
+    `,
+    ["site", JSON.stringify(normalizedState)]
+  );
 }
 
 function sendJson(response, statusCode, body) {
@@ -127,14 +202,14 @@ function isAdmin(request) {
   return crypto.timingSafeEqual(Buffer.from(password), Buffer.from(adminPassword));
 }
 
-function trackEvent(eventName, beatId = null) {
-  const state = readState();
+async function trackEvent(eventName, beatId = null) {
+  const state = await readState();
   state.stats[eventName] = (state.stats[eventName] || 0) + 1;
   if (beatId) {
     const key = `${eventName}:${beatId}`;
     state.stats[key] = (state.stats[key] || 0) + 1;
   }
-  writeState(state);
+  await writeState(state);
   return state.stats;
 }
 
@@ -147,7 +222,7 @@ function serveStatic(request, response) {
   if (
     !filePath.startsWith(rootDir) ||
     relativePath.startsWith("data") ||
-    ["server.js", "package.json"].includes(relativePath)
+    ["server.js", "package.json", "render.yaml"].includes(relativePath)
   ) {
     response.writeHead(403);
     response.end("Forbidden");
@@ -171,7 +246,7 @@ function serveStatic(request, response) {
 
 async function handleApi(request, response) {
   const requestUrl = new URL(request.url, `http://${request.headers.host}`);
-  const state = readState();
+  const state = await readState();
 
   if (request.method === "GET" && requestUrl.pathname === "/api/beats") {
     sendJson(response, 200, { beats: state.beats });
@@ -180,7 +255,7 @@ async function handleApi(request, response) {
 
   if (request.method === "POST" && requestUrl.pathname === "/api/events") {
     const body = await readBody(request);
-    sendJson(response, 200, { stats: trackEvent(body.name, body.beatId) });
+    sendJson(response, 200, { stats: await trackEvent(body.name, body.beatId) });
     return;
   }
 
@@ -196,7 +271,7 @@ async function handleApi(request, response) {
       browser: body.browser || "Unknown"
     });
     state.visits = state.visits.slice(0, 500);
-    writeState(state);
+    await writeState(state);
     sendJson(response, 200, { ok: true });
     return;
   }
@@ -214,14 +289,14 @@ async function handleApi(request, response) {
   if (request.method === "PUT" && requestUrl.pathname === "/api/beats") {
     const body = await readBody(request);
     state.beats = Array.isArray(body.beats) ? body.beats : state.beats;
-    writeState(state);
+    await writeState(state);
     sendJson(response, 200, { beats: state.beats });
     return;
   }
 
   if (request.method === "POST" && requestUrl.pathname === "/api/import") {
     const body = await readBody(request);
-    writeState({
+    await writeState({
       beats: Array.isArray(body.beats) ? body.beats : state.beats,
       stats: body.stats && typeof body.stats === "object" ? body.stats : state.stats,
       visits: Array.isArray(body.visits) ? body.visits : state.visits
@@ -233,7 +308,7 @@ async function handleApi(request, response) {
   if (request.method === "DELETE" && requestUrl.pathname === "/api/stats") {
     state.stats = {};
     state.visits = [];
-    writeState(state);
+    await writeState(state);
     sendJson(response, 200, { ok: true });
     return;
   }
@@ -243,12 +318,13 @@ async function handleApi(request, response) {
 
 const server = http.createServer((request, response) => {
   if (request.url === "/health") {
-    sendJson(response, 200, { ok: true });
+    sendJson(response, 200, { ok: true, storage: databaseUrl ? "postgres" : "json" });
     return;
   }
 
   if (request.url.startsWith("/api/")) {
-    handleApi(request, response).catch(() => {
+    handleApi(request, response).catch((error) => {
+      console.error(error);
       sendJson(response, 500, { error: "Erreur serveur" });
     });
     return;
@@ -257,8 +333,15 @@ const server = http.createServer((request, response) => {
   serveStatic(request, response);
 });
 
-ensureDataFile();
-server.listen(port, () => {
-  console.log(`Yatus Beats running on http://localhost:${port}`);
-  console.log(`Admin password: ${adminPassword}`);
-});
+initDatabase()
+  .then(() => {
+    server.listen(port, () => {
+      console.log(`Yatus Beats running on http://localhost:${port}`);
+      console.log(`Storage: ${databaseUrl ? "Postgres/Supabase" : "JSON file"}`);
+      console.log(`Admin password: ${adminPassword}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Failed to initialize storage", error);
+    process.exit(1);
+  });
