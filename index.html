@@ -140,6 +140,47 @@
         <div class="beat-grid" id="beatGrid"></div>
       </section>
 
+      <section class="section custom-order" id="autre-beat">
+        <div class="custom-order-copy">
+          <p class="eyebrow">Commande speciale</p>
+          <h2>Tu as vu un autre beat sur YouTube ?</h2>
+          <p>Colle le lien de la video, choisis ta licence et envoie ta demande directement.</p>
+        </div>
+        <form class="custom-order-form" id="otherBeatForm">
+          <label>
+            Lien YouTube du beat
+            <input id="otherBeatLink" type="url" placeholder="https://youtu.be/..." required />
+          </label>
+          <label>
+            Licence
+            <select id="otherBeatLicense">
+              <option value="MP3">MP3 - 15 000 F CFA</option>
+              <option value="WAV">WAV - 25 000 F CFA</option>
+              <option value="Stems">Stems - 45 000 F CFA</option>
+              <option value="Exclusive">Exclusive - 150 000 F CFA</option>
+            </select>
+          </label>
+          <label>
+            Nom d'artiste
+            <input id="otherBeatArtist" placeholder="Ton nom d'artiste" />
+          </label>
+          <label>
+            Message
+            <textarea id="otherBeatMessage" placeholder="Precision, delai, question..."></textarea>
+          </label>
+          <div class="checkout-actions">
+            <button class="button primary" type="submit" data-order-channel="whatsapp">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.7-1.1A9 9 0 1 0 12 3Zm4.8 12.9c-.2.5-1.1 1-1.5 1.1-.4 0-.9.1-1.5-.1-.3-.1-.8-.3-1.4-.6-2.5-1.1-4.1-3.6-4.2-3.8-.1-.1-1-1.3-1-2.5s.6-1.8.8-2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.4 0 .5l-.4.5-.3.4c-.1.1-.2.3-.1.5.1.2.6 1 1.3 1.6.9.8 1.6 1 1.8 1.1.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.8.9c.2.1.4.2.4.3 0 .1 0 .7-.2 1.2Z"/></svg>
+              Envoyer WhatsApp
+            </button>
+            <button class="button secondary" type="submit" data-order-channel="email">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v12H4V6Zm0 1 8 6 8-6"/></svg>
+              Envoyer Email
+            </button>
+          </div>
+        </form>
+      </section>
+
       <section class="section popular-section" id="populaires">
         <div class="section-head">
           <div>

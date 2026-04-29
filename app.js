@@ -67,6 +67,11 @@ const currentCover = document.querySelector("#currentCover");
 const audioPlayer = document.querySelector("#audioPlayer");
 const filterButtons = document.querySelectorAll("[data-filter]");
 const youtubeStatus = document.querySelector("#youtubeStatus");
+const otherBeatForm = document.querySelector("#otherBeatForm");
+const otherBeatLink = document.querySelector("#otherBeatLink");
+const otherBeatLicense = document.querySelector("#otherBeatLicense");
+const otherBeatArtist = document.querySelector("#otherBeatArtist");
+const otherBeatMessage = document.querySelector("#otherBeatMessage");
 
 let activeFilter = "all";
 let recentBeats = [...defaultBeats];
@@ -264,6 +269,23 @@ function updateCheckoutLinks(total) {
   emailCheckout.href = `mailto:${contact.email}?subject=Commande%20Yatus%20Beats&body=${message}`;
 }
 
+function buildOtherBeatMessage() {
+  const license = otherBeatLicense.value;
+  const price = licensePrices[license];
+  const artist = otherBeatArtist.value.trim() || "A preciser";
+  const note = otherBeatMessage.value.trim() || "Aucun message supplementaire";
+
+  return [
+    "Bonjour Yatus Beats,",
+    "",
+    "Je veux acheter un beat vu sur ta chaine YouTube :",
+    `Lien : ${otherBeatLink.value.trim()}`,
+    `Licence : ${license} - ${formatPrice(price)}`,
+    `Nom d'artiste : ${artist}`,
+    `Message : ${note}`,
+  ].join("\n");
+}
+
 function previewBeat(beatId) {
   const beat = findBeat(beatId);
   if (!beat) return;
@@ -320,6 +342,21 @@ clearCart.addEventListener("click", () => {
   cart = [];
   trackEvent("cartClears");
   renderCart();
+});
+
+otherBeatForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const submitter = event.submitter;
+  const message = buildOtherBeatMessage();
+
+  trackEvent("otherBeatRequests");
+
+  if (submitter?.dataset.orderChannel === "email") {
+    window.location.href = `mailto:${contact.email}?subject=Commande%20autre%20beat%20Yatus%20Beats&body=${encodeURIComponent(message)}`;
+    return;
+  }
+
+  window.open(`https://wa.me/${contact.whatsappNumber}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
 });
 
 audioPlayer.addEventListener("contextmenu", (event) => {

@@ -654,6 +654,55 @@ h3 {
     #15171b;
 }
 
+.custom-order {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.75fr) minmax(18rem, 1.25fr);
+  gap: 1.2rem;
+  align-items: start;
+  background:
+    linear-gradient(90deg, rgba(67, 223, 226, 0.14), transparent 48%),
+    linear-gradient(270deg, rgba(255, 45, 45, 0.12), transparent 46%),
+    #111216;
+}
+
+.custom-order-copy p:not(.eyebrow) {
+  max-width: 34rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.custom-order-form {
+  display: grid;
+  gap: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(24, 26, 30, 0.86);
+  padding: 1rem;
+}
+
+.custom-order-form label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.custom-order-form input,
+.custom-order-form select,
+.custom-order-form textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #0f1013;
+  color: var(--text);
+  padding: 0.75rem;
+}
+
+.custom-order-form textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
 .contact-band p {
   max-width: 48rem;
   line-height: 1.7;
@@ -691,6 +740,7 @@ h3 {
 
   .hero,
   .split-panel,
+  .custom-order,
   .beat-grid,
   .license-grid {
     grid-template-columns: 1fr;
