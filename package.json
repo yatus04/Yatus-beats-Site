@@ -1,0 +1,10 @@
+{
+  "name": "yatus-beats",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site Yatus Beats avec backend Node natif",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  }
+}

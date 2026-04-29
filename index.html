@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Yatus Beats | Instrumentales, licences et achats</title>
+    <meta
+      name="description"
+      content="Ecoute les dernieres instrumentales de Yatus Beats, choisis ta licence et commande directement depuis le site."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Yatus Beats">
+        <span class="brand-mark">
+          <img src="assets/logo-yatus-beats.png" alt="" />
+        </span>
+        <span>
+          <strong>Yatus Beats</strong>
+          <small>Instrumentales premium</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="#beats">Beats</a>
+        <a href="#populaires">Populaires</a>
+        <a href="#licences">Licences</a>
+        <a href="#commande">Commander</a>
+      </nav>
+      <a class="icon-button youtube" href="https://www.youtube.com/@Yatus_Beats/" target="_blank" rel="noreferrer" aria-label="Ouvrir YouTube">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M23 7.1a3 3 0 0 0-2.1-2.1C19 4.5 12 4.5 12 4.5s-7 0-8.9.5A3 3 0 0 0 1 7.1 31.8 31.8 0 0 0 .5 12 31.8 31.8 0 0 0 1 16.9a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31.8 31.8 0 0 0 .5-4.9 31.8 31.8 0 0 0-.5-4.9ZM9.8 15.2V8.8l5.7 3.2-5.7 3.2Z"/></svg>
+      </a>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-media" aria-hidden="true">
+          <div class="speaker left"></div>
+          <div class="speaker right"></div>
+          <div class="vinyl">
+            <div class="vinyl-label">YB</div>
+          </div>
+          <div class="waveform">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="hero-copy">
+          <p class="eyebrow">Dernieres sorties</p>
+          <h1 id="hero-title">Yatus Beats</h1>
+          <p>
+            Beatmaker producer, sonorites drill africaines, mbalakh et vibes urbaines.
+            Ecoute les dernieres sorties, choisis ta licence et commande directement.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#beats">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7V5Z"/></svg>
+              Ecouter les beats
+            </a>
+            <a class="button secondary" href="#commande">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6.5 6.5h15l-2 8h-11l-2-8Zm0 0L5.8 4H3m6.2 14.5h.1m8 0h.1"/><circle cx="9.2" cy="18.5" r="1.2"/><circle cx="17.3" cy="18.5" r="1.2"/></svg>
+              Acheter
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section split-panel" aria-label="Lecteur et panier">
+        <aside class="now-playing" aria-live="polite">
+          <div class="cover-art" id="currentCover">
+            <span>YB</span>
+          </div>
+          <div>
+            <p class="eyebrow">En ecoute</p>
+            <h2 id="currentTitle">Choisis un beat</h2>
+            <p id="currentMeta">Les previews se lancent depuis le catalogue.</p>
+            <audio class="audio-player" id="audioPlayer" controls controlslist="nodownload noplaybackrate" preload="none">
+              Ton navigateur ne supporte pas le lecteur audio.
+            </audio>
+          </div>
+          <div class="player-bars" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </aside>
+
+        <aside class="cart" id="commande">
+          <div class="cart-head">
+            <div>
+              <p class="eyebrow">Commande</p>
+              <h2>Panier</h2>
+            </div>
+            <button class="icon-button" id="clearCart" type="button" aria-label="Vider le panier">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14"/></svg>
+            </button>
+          </div>
+          <div class="cart-items" id="cartItems">
+            <p class="empty">Aucun beat selectionne.</p>
+          </div>
+          <div class="cart-total">
+            <span>Total</span>
+            <strong id="cartTotal">0 F CFA</strong>
+          </div>
+          <div class="checkout-actions">
+            <a class="button primary" id="whatsappCheckout" href="#" target="_blank" rel="noreferrer">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.7-1.1A9 9 0 1 0 12 3Zm4.8 12.9c-.2.5-1.1 1-1.5 1.1-.4 0-.9.1-1.5-.1-.3-.1-.8-.3-1.4-.6-2.5-1.1-4.1-3.6-4.2-3.8-.1-.1-1-1.3-1-2.5s.6-1.8.8-2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.4 0 .5l-.4.5-.3.4c-.1.1-.2.3-.1.5.1.2.6 1 1.3 1.6.9.8 1.6 1 1.8 1.1.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.8.9c.2.1.4.2.4.3 0 .1 0 .7-.2 1.2Z"/></svg>
+              WhatsApp
+            </a>
+            <a class="button secondary" id="emailCheckout" href="#">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v12H4V6Zm0 1 8 6 8-6"/></svg>
+              Email
+            </a>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section" id="beats">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Catalogue</p>
+            <h2>Dernieres videos YouTube</h2>
+            <p class="section-note" id="youtubeStatus">Catalogue connecte aux liens YouTube, sans API ni quota.</p>
+          </div>
+          <div class="filters" role="list" aria-label="Filtres de style">
+            <button class="chip active" type="button" data-filter="all">Tous</button>
+            <button class="chip" type="button" data-filter="African Drill Mbalakh">African Drill Mbalakh</button>
+            <button class="chip" type="button" data-filter="African Drill">African Drill</button>
+            <button class="chip" type="button" data-filter="Drill Mbalakh">Drill Mbalakh</button>
+            <button class="chip" type="button" data-filter="Drill">Drill</button>
+            <button class="chip" type="button" data-filter="Instrumental">Instrumental</button>
+          </div>
+        </div>
+        <div class="beat-grid" id="beatGrid"></div>
+      </section>
+
+      <section class="section popular-section" id="populaires">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">YouTube</p>
+            <h2>Beats populaires</h2>
+          </div>
+          <a class="button secondary" href="https://www.youtube.com/@Yatus_Beats/" target="_blank" rel="noreferrer">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M23 7.1a3 3 0 0 0-2.1-2.1C19 4.5 12 4.5 12 4.5s-7 0-8.9.5A3 3 0 0 0 1 7.1 31.8 31.8 0 0 0 .5 12 31.8 31.8 0 0 0 1 16.9a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31.8 31.8 0 0 0 .5-4.9 31.8 31.8 0 0 0-.5-4.9ZM9.8 15.2V8.8l5.7 3.2-5.7 3.2Z"/></svg>
+            Voir la chaine
+          </a>
+        </div>
+        <div class="beat-grid compact" id="popularGrid"></div>
+      </section>
+
+      <section class="section licenses" id="licences">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Licences</p>
+            <h2>Choisis selon ton projet</h2>
+          </div>
+        </div>
+        <div class="license-grid">
+          <article>
+            <span>MP3</span>
+            <strong>15 000 F CFA</strong>
+            <p>Licence non exclusive, sortie sur plateformes et clips autorises. Content ID interdit.</p>
+          </article>
+          <article>
+            <span>WAV</span>
+            <strong>25 000 F CFA</strong>
+            <p>Licence non exclusive avec fichier WAV, meilleure qualite pour enregistrer et mixer.</p>
+          </article>
+          <article>
+            <span>Stems</span>
+            <strong>45 000 F CFA</strong>
+            <p>Pistes separees pour un mix plus precis. Usage non exclusif, paiement avant livraison.</p>
+          </article>
+          <article>
+            <span>Exclusive</span>
+            <strong>150 000 F CFA</strong>
+            <p>Droits complets sur le beat, plus aucune vente a d'autres artistes, Content ID autorise.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section contact-band">
+        <div>
+          <p class="eyebrow">Collabs</p>
+          <h2>Besoin d'un beat sur mesure ?</h2>
+          <p>Programmation et productions custom : de 50 000 F a 250 000 F selon le projet. Livraison sous 24h apres paiement pour les licences.</p>
+        </div>
+        <a class="button primary" href="mailto:contact.yatusbeats@gmail.com?subject=Beat%20sur%20mesure%20-%20Yatus%20Beats">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v12H4V6Zm0 1 8 6 8-6"/></svg>
+          Demander un custom
+        </a>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Yatus Beats</span>
+      <span>Instrumentales, licences et productions custom. <a href="admin.html">Admin</a></span>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

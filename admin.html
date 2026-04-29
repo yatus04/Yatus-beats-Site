@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin | Yatus Beats</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body class="admin-body">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Retour au site Yatus Beats">
+        <span class="brand-mark">
+          <img src="assets/logo-yatus-beats.png" alt="" />
+        </span>
+        <span>
+          <strong>Yatus Admin</strong>
+          <small>Gestion du site</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Navigation admin">
+        <a href="#beats-admin">Beats</a>
+        <a href="#stats-admin">Stats</a>
+        <a href="#visites-admin">Visites</a>
+        <a href="index.html">Voir le site</a>
+      </nav>
+    </header>
+
+    <main class="admin-shell">
+      <section class="admin-hero">
+        <p class="eyebrow">Dashboard</p>
+        <h1>Admin Yatus Beats</h1>
+        <p>Gere le catalogue, consulte les statistiques du serveur et exporte tes donnees.</p>
+      </section>
+
+      <section class="admin-grid" id="stats-admin">
+        <article class="metric-card">
+          <span>Visites</span>
+          <strong id="metricVisits">0</strong>
+        </article>
+        <article class="metric-card">
+          <span>Ecoutes</span>
+          <strong id="metricPlays">0</strong>
+        </article>
+        <article class="metric-card">
+          <span>Ajouts panier</span>
+          <strong id="metricCartAdds">0</strong>
+        </article>
+        <article class="metric-card">
+          <span>Beats actifs</span>
+          <strong id="metricBeats">0</strong>
+        </article>
+      </section>
+
+      <section class="admin-panel" id="beats-admin">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Catalogue</p>
+            <h2>Modifier les beats</h2>
+          </div>
+          <div class="admin-actions">
+            <button class="button secondary" type="button" id="resetBeats">Reinitialiser</button>
+            <button class="button secondary" type="button" id="exportData">Exporter</button>
+          </div>
+        </div>
+
+        <form class="admin-form" id="beatForm">
+          <input type="hidden" id="beatEditIndex" value="" />
+          <label>
+            Titre
+            <input id="beatTitle" required placeholder="India" />
+          </label>
+          <label>
+            ID YouTube
+            <input id="beatId" required placeholder="9tq_dURbYuo" />
+          </label>
+          <label>
+            Style
+            <input id="beatStyle" required placeholder="Drill Mbalakh" />
+          </label>
+          <label>
+            BPM
+            <input id="beatBpm" type="number" min="1" placeholder="147" />
+          </label>
+          <label>
+            Tonalite
+            <input id="beatKey" placeholder="Non precisee" />
+          </label>
+          <label>
+            Mood
+            <input id="beatMood" placeholder="Sombre, puissant" />
+          </label>
+          <label>
+            Lien YouTube
+            <input id="beatYoutube" required placeholder="https://youtu.be/..." />
+          </label>
+          <label>
+            Chemin audio preview
+            <input id="beatAudio" required placeholder="assets/audio/beat-preview.mp3" />
+          </label>
+          <label class="checkbox-row">
+            <input id="beatPopular" type="checkbox" />
+            Afficher dans populaires
+          </label>
+          <div class="form-actions">
+            <button class="button primary" type="submit">Enregistrer</button>
+            <button class="button secondary" type="button" id="cancelEdit">Annuler</button>
+          </div>
+        </form>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Titre</th>
+                <th>Style</th>
+                <th>BPM</th>
+                <th>Populaire</th>
+                <th>Stats</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="beatsTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-panel" id="visites-admin">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Audience</p>
+            <h2>Dernieres visites locales</h2>
+          </div>
+          <button class="button secondary" type="button" id="clearStats">Vider les stats</button>
+        </div>
+        <p class="section-note">Les visites sont maintenant enregistrees par le backend tant que le site est ouvert via le serveur Node.</p>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Session</th>
+                <th>Page</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+            <tbody id="visitsTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Sauvegarde</p>
+            <h2>Importer des donnees</h2>
+          </div>
+        </div>
+        <textarea id="importBox" placeholder="Colle ici un export JSON"></textarea>
+        <button class="button primary" type="button" id="importData">Importer</button>
+      </section>
+    </main>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

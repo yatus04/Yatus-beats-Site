@@ -1,0 +1,174 @@
+.admin-body {
+  background:
+    linear-gradient(90deg, rgba(67, 223, 226, 0.1), transparent 45%),
+    linear-gradient(270deg, rgba(255, 45, 45, 0.1), transparent 40%),
+    #0c0d0f;
+}
+
+.admin-shell {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1rem, 4vw, 3rem);
+}
+
+.admin-error {
+  margin: 1rem;
+  border: 1px solid rgba(255, 45, 45, 0.45);
+  border-radius: var(--radius);
+  background: rgba(255, 45, 45, 0.12);
+  color: var(--text);
+  padding: 1rem;
+}
+
+.admin-hero,
+.admin-panel,
+.metric-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(24, 26, 30, 0.86);
+}
+
+.admin-hero {
+  padding: clamp(1.5rem, 4vw, 3rem);
+  background:
+    linear-gradient(90deg, rgba(19, 26, 54, 0.78), rgba(189, 98, 141, 0.36)),
+    url("assets/yatus-banner.jpg") center / cover;
+}
+
+.admin-hero h1 {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+}
+
+.admin-hero p:not(.eyebrow) {
+  max-width: 44rem;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.metric-card {
+  padding: 1rem;
+}
+
+.metric-card span {
+  display: block;
+  color: var(--muted);
+}
+
+.metric-card strong {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--teal);
+  font-size: 2.2rem;
+}
+
+.admin-panel {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.admin-actions,
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.admin-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.admin-form label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.admin-form input,
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #111216;
+  color: var(--text);
+  padding: 0.75rem;
+}
+
+.checkbox-row {
+  align-content: center;
+  grid-template-columns: auto 1fr;
+}
+
+.checkbox-row input {
+  width: auto;
+}
+
+.form-actions {
+  align-items: end;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 0.8rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.admin-table th {
+  color: var(--teal);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.admin-table small {
+  display: block;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+
+.table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.mini-button {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  cursor: pointer;
+  padding: 0.45rem 0.6rem;
+}
+
+textarea {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+@media (max-width: 900px) {
+  .admin-grid,
+  .admin-form {
+    grid-template-columns: 1fr;
+  }
+}
